@@ -94,3 +94,4 @@ E:\ing sistemas\programacion1\tareas\ElliotDvp-tarea04\obj\Debug\net9.0\refint\E
 E:\ing sistemas\programacion1\tareas\ElliotDvp-tarea04\obj\Debug\net9.0\ElliotDvp-tarea04.pdb
 E:\ing sistemas\programacion1\tareas\ElliotDvp-tarea04\obj\Debug\net9.0\ElliotDvp-tarea04.genruntimeconfig.cache
 E:\ing sistemas\programacion1\tareas\ElliotDvp-tarea04\obj\Debug\net9.0\ref\ElliotDvp-tarea04.dll
+E:\ing sistemas\programacion1\tareas\ElliotDvp-tarea04\obj\Debug\net9.0\ElliotDvp-tarea04.sourcelink.json
