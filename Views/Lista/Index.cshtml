@@ -1,0 +1,255 @@
+@model List<ElliotDvp_tarea04.Models.Lista>
+
+<h1 class="titulo-lista">Lista de Razas de Perros</h1>
+
+<div class="filtro-container">
+    <label for="filtro-categoria">Filtrar por categoría:</label>
+    <select id="filtro-categoria" class="filtro-select">
+        <option value="todas">Todas las categorías</option>
+        <option value="Perros pequeños">Perros pequeños</option>
+        <option value="Perros familiares">Perros familiares</option>
+        <option value="Perros raros">Perros raros</option>
+        <option value="Perros guardianes">Perros guardianes</option>
+        <option value="Perros para apartamento">Perros para apartamento</option>
+    </select>
+    <button id="btn-filtrar" class="btn-filtrar">Filtrar</button>
+</div>
+
+<div class="grid-container">
+    @foreach (var perro in Model)
+    {
+        <div class="perro-card" data-categoria="@perro.Categoria" onclick="mostrarDetallePerro(this)">
+            <img src="@perro.ImagenUrl" alt="@perro.Nombre" class="perro-img">
+            <h3>@perro.Nombre</h3>
+            <p>@(perro.Descripcion?.Length > 100 ? perro.Descripcion.Substring(0, 100) + "..." : perro.Descripcion ?? "Sin descripción disponible")</p>
+            
+            <div class="hidden-data" 
+                 data-nombre="@perro.Nombre"
+                 data-edad="@perro.Edad"
+                 data-tamano="@perro.Tamano"
+                 data-peso="@perro.Peso"
+                 data-descripcion="@perro.Descripcion"
+                 data-imagen="@perro.ImagenUrl"
+                 data-categoria="@perro.Categoria"
+                 style="display: none;"></div>
+        </div>
+    }
+</div>
+
+<div id="detalle-perro" class="modal-detalle" style="display:none !important;">
+    <button onclick="cerrarDetalle()" class="cerrar-modal">×</button>
+    <h2 id="detalle-nombre"></h2>
+    <div class="modal-content">
+        <img id="detalle-imagen" src="" alt="Imagen del perro" class="modal-img">
+        <div class="info-container">
+            <p><b>Categoría:</b> <span id="detalle-categoria"></span></p>
+            <p><b>Edad Promedio:</b> <span id="detalle-edad"></span></p>
+            <p><b>Tamaño:</b> <span id="detalle-tamano"></span></p>
+            <p><b>Peso Promedio:</b> <span id="detalle-peso"></span></p>
+        </div>
+    </div>
+    <p id="detalle-descripcion" class="modal-desc"></p>
+</div>
+<div id="overlay" class="overlay" style="display:none !important;"></div>
+
+<style>
+    .titulo-lista {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    .filtro-container {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filtro-select, .btn-filtrar {
+        padding: 8px 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+
+    .btn-filtrar {
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn-filtrar:hover {
+        background-color: #219150;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .perro-card {
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        padding: 15px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .perro-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .perro-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Modal */
+    .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 999;
+    }
+
+    .modal-detalle {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .cerrar-modal {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .modal-content {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .modal-img {
+        max-width: 250px;
+        border-radius: 5px;
+    }
+
+    .modal-desc {
+        margin-top: 15px;
+        line-height: 1.5;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .animacion {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+
+    #detalle-perro {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    text-align: center; /* Centrar contenido */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+#detalle-perro img {
+    max-width: 250px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+#detalle-perro .info {
+    text-align: left;
+    margin: 0 auto;
+    max-width: 400px;
+}
+</style>
+
+<script>
+    
+
+    function mostrarDetallePerro(element) {
+        const hiddenData = element.querySelector('.hidden-data');
+        
+        document.getElementById("detalle-perro").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+        
+        document.getElementById("detalle-nombre").textContent = hiddenData.dataset.nombre;
+        document.getElementById("detalle-categoria").textContent = hiddenData.dataset.categoria;
+        document.getElementById("detalle-edad").textContent = hiddenData.dataset.edad;
+        document.getElementById("detalle-tamano").textContent = hiddenData.dataset.tamano;
+        document.getElementById("detalle-peso").textContent = hiddenData.dataset.peso;
+        document.getElementById("detalle-descripcion").textContent = hiddenData.dataset.descripcion;
+        document.getElementById("detalle-imagen").src = hiddenData.dataset.imagen;
+    }
+
+    function cerrarDetalle() {
+        document.getElementById("detalle-perro").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    document.getElementById("btn-filtrar").addEventListener("click", function() {
+        const categoriaSeleccionada = document.getElementById("filtro-categoria").value;
+        const cards = document.querySelectorAll(".perro-card");
+        
+        cards.forEach(card => {
+            card.style.display = (categoriaSeleccionada === "todas" || card.dataset.categoria === categoriaSeleccionada) 
+                ? "block" 
+                : "none";
+        });
+        
+        const detalleVisible = document.getElementById("detalle-perro").style.display === "block";
+        if (detalleVisible) {
+            const categoriaDetalle = document.getElementById("detalle-categoria").textContent;
+            if (categoriaSeleccionada !== "todas" && categoriaDetalle !== categoriaSeleccionada) {
+                cerrarDetalle();
+            }
+        }
+    });
+</script>
